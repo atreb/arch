@@ -18,7 +18,12 @@ mkswap /dev/sda2
 #mount root partition and install base
 mount /dev/sda1 /mnt
 (echo ; echo y) | pacstrap -i /mnt base
+#setup fstab
 genfstab -U -p /mnt >> /mnt/etc/fstab
 echo "/dev/sda2 none swap defaults 0 0" >> /mnt/etc/fstab
+#basic setup
 arch-chroot /mnt
 ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
+#getting out
+exit
+umount -R /mnt
