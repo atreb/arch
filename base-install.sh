@@ -19,7 +19,7 @@ mount /dev/sda1 /mnt
 genfstab -U -p /mnt >> /mnt/etc/fstab
 echo "/dev/sda2 none swap defaults 0 0" >> /mnt/etc/fstab
 #basic setup
-arch-chroot /mnt ./base-chroot-install.sh
+arch-chroot /mnt /bin/bash -c "./base-chroot-install.sh"
 #getting out
 exit
 umount -R /mnt
