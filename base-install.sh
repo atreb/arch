@@ -25,7 +25,7 @@ mount /dev/sda1 /mnt
 genfstab -U -p /mnt >> /mnt/etc/fstab
 echo "/dev/sda2 none swap defaults 0 0" >> /mnt/etc/fstab
 #basic setup
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash
 #set timezone
 ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 #uncomment line in /etc/locale.gen that has #en_US.UTF-8 UTF-8
@@ -63,9 +63,9 @@ echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
 (echo Y) | pacman -Syu
 (echo Y) | pacman -S yaourt
 #setup temp root & user password
-(echo $ROOT_PASS) | passwd
+(echo $ROOT_PASS; echo $ROOT_PASS) | passwd
 useradd -m -g users -s /bin/bash bhupendra
-(echo $USER_PASS) | passwd bhupendra
+(echo $USER_PASS; echo $ROOT_PASS) | passwd bhupendra
 echo "bhupendra ALL=(ALL) ALL" >> /etc/sudoers
 #getting out
 exit
