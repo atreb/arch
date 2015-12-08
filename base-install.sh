@@ -68,6 +68,7 @@ echo "bhupendra ALL=(ALL) ALL" >> /etc/sudoers
 exit
 EOF
 
+chmod 775 /mnt/root/base-chroot-install.sh
 arch-chroot /mnt /root/base-chroot-install.sh
 #delete file and unmount
 rm -rf /mnt/root/base-chroot-install.sh
