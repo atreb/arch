@@ -58,7 +58,7 @@ ln -s /usr/bin/vim /usr/bin/vi
 #configure and install yaourt
 echo "[archlinuxfr]" >> /etc/pacman.conf
 echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
+echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf
 (echo Y) | pacman -Syu
 (echo Y) | pacman -S yaourt
 #setup temp root & user password
