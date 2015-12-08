@@ -48,8 +48,9 @@ sed -i -e 's/GRUB_CMDLINE_LINUX=\"\"/GRUB_CMDLINE_LINUX=\"resume=\/dev\/sda2\"/g
 grub-mkconfig -o /boot/grub/grub.cfg
 #install vim instead of vi & nano along with some common packages
 (echo Y) | pacman -Rs vi nano
-(echo Y) | pacman -S vim base-devel wget rsync openssh
+(echo Y) | pacman -S vim wget rsync openssh sudo
 ln -s /usr/bin/vim /usr/bin/vi
+(echo ;) | pacman -S base-devel
 #install audio & video drivers as well as xorg
 (echo Y) | pacman -S xorg-server xorg-server-utils xorg-xinit mesa
 (echo Y) | pacman -S alsa-utils alsa-plugins
