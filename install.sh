@@ -42,44 +42,40 @@ hwclock --systohc --utc
 #set hostname
 echo $HOST_NAME > /etc/hostname
 #install boot loader,
-(echo Y) | pacman -S grub
+pacman -S --noconfirm grub
 grub-install --target=i386-pc --recheck --debug /dev/sda
 #set swap partition for resume from hibernation
 sed -i -e 's/GRUB_CMDLINE_LINUX=\"\"/GRUB_CMDLINE_LINUX=\"resume=\/dev\/sda2\"/g' /etc/default/grub
 #reconfigure grub
 grub-mkconfig -o /boot/grub/grub.cfg
 #install vim instead of vi & nano along with some common packages
-(echo Y) | pacman -Rs vi nano
-(echo Y) | pacman -S vim wget rsync openssh git
+pacman -Rs --noconfirm vi nano
+pacman -S --noconfirm vim wget rsync openssh git
 ln -s /usr/bin/vim /usr/bin/vi
 #install audio & video drivers as well as xorg
-(echo Y) | pacman -S xorg-server xorg-server-utils xorg-xinit mesa alsa-utils alsa-plugins xf86-video-intel xf86-video-vesa
+pacman -S --noconfirm xorg-server xorg-server-utils xorg-xinit mesa alsa-utils alsa-plugins xf86-video-intel xf86-video-vesa
 #configure and install yaourt
-echo "[archlinuxfr]" >> /etc/pacman.conf
-echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf
-(echo Y) | pacman -Syu
-(echo Y) | pacman -S yaourt
+echo '[archlinuxfr]' >> /etc/pacman.conf
+echo 'SigLevel = Never' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinux.fr/\$arch' >> /etc/pacman.conf
+pacman -Syu --noconfirm
+pacman -S --noconfirm yaourt
 #setup temp root & user password
 (echo $ROOT_PASS; echo $ROOT_PASS) | passwd
 useradd -m -g users -s /bin/bash $USER_NAME
 (echo $USER_PASS; echo $ROOT_PASS) | passwd $USER_NAME
 echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 #KDE
-(echo ; echo y) | pacman -S sddm
-(echo ; echo 2; echo; echo y) | pacman -S plasma
-(echo 2; echo Y) | pacman -S kcalc konsole kwrite dolphin ark p7zip zip unzip unrar gwenview qt5-imageformats kimageformats k3b dvd+rw-tools vcdimager transcode emovix jdk8-openjdk icedtea-web libreoffice-fresh hyphen-en libmythes mythes-en kdegraphics-ocular simplescreenrecorder amarok ktorrent partitionmanager ntfs-3g dosfstools ncdu cups hplip print-manager sane xsane firefox gtk-theme-orion cronie
+pacman -S --noconfirm sddm plasma
+(echo 2; echo Y) | pacman -S kcalc konsole kwrite dolphin ark p7zip zip unzip unrar gwenview qt5-imageformats kimageformats k3b dvd+rw-tools vcdimager transcode emovix jdk8-openjdk icedtea-web libreoffice-fresh hyphen-en libmythes mythes-en kdegraphics-okular simplescreenrecorder amarok ktorrent partitionmanager ntfs-3g dosfstools ncdu cups hplip print-manager sane xsane firefox flashplugin gtk-theme-orion cronie
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable org.cups.cupsd
 systemctl enable cronie
 #Home directories
-cd /home/bhupendra
+cd /home/$USER_NAME
 mkdir -p Downloads Videos Music Pictures Documents DEV/scripts DEV/WORKSPACE
-echo 'PATH="$HOME/DEV/scripts:$PATH"' >> /home/bhupendra/.bashrc
-#aur packages
-yaourt -S npapi-vlc-git
-yaourt -S --noconfirm google-chrome
+echo 'PATH="/home/$USER_NAME/DEV/scripts:\$PATH"' >> /home/$USER_NAME/.bashrc
 exit
 EOF
 
