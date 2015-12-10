@@ -5,6 +5,7 @@ DISK_DEVICE="/dev/sda"
 ROOT_SPACE="+9G"
 HOST_NAME="arch"
 ROOT_PASS="test"
+USER_NAME="bhupendra"
 USER_PASS="test"
 
 #create partitions - 9G root / and 1G swap assuming 10G /dev/sda
@@ -15,9 +16,10 @@ USER_PASS="test"
 #format partitions
 mkfs -t ext4 /dev/sda1
 mkswap /dev/sda2
+swapon /dev/sda2
 #mount root partition and install base
 mount /dev/sda1 /mnt
-(echo ; echo y) | pacstrap -i /mnt base
+pacstrap /mnt base base-devel
 #setup fstab
 genfstab -U -p /mnt >> /mnt/etc/fstab
 echo "/dev/sda2 none swap defaults 0 0" >> /mnt/etc/fstab
@@ -48,13 +50,10 @@ sed -i -e 's/GRUB_CMDLINE_LINUX=\"\"/GRUB_CMDLINE_LINUX=\"resume=\/dev\/sda2\"/g
 grub-mkconfig -o /boot/grub/grub.cfg
 #install vim instead of vi & nano along with some common packages
 (echo Y) | pacman -Rs vi nano
-(echo Y) | pacman -S vim wget rsync openssh
+(echo Y) | pacman -S vim wget rsync openssh git
 ln -s /usr/bin/vim /usr/bin/vi
-(echo ; echo y) | pacman -S base-devel
 #install audio & video drivers as well as xorg
-(echo Y) | pacman -S xorg-server xorg-server-utils xorg-xinit mesa
-(echo Y) | pacman -S alsa-utils alsa-plugins
-(echo Y) | pacman -S xf86-video-intel xf86-video-ati xf86-video-nouveau xf86-video-vesa
+(echo Y) | pacman -S xorg-server xorg-server-utils xorg-xinit mesa alsa-utils alsa-plugins xf86-video-intel xf86-video-vesa
 #configure and install yaourt
 echo "[archlinuxfr]" >> /etc/pacman.conf
 echo "SigLevel = Never" >> /etc/pacman.conf
@@ -63,9 +62,24 @@ echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf
 (echo Y) | pacman -S yaourt
 #setup temp root & user password
 (echo $ROOT_PASS; echo $ROOT_PASS) | passwd
-useradd -m -g users -s /bin/bash bhupendra
-(echo $USER_PASS; echo $ROOT_PASS) | passwd bhupendra
-echo "bhupendra ALL=(ALL) ALL" >> /etc/sudoers
+useradd -m -g users -s /bin/bash $USER_NAME
+(echo $USER_PASS; echo $ROOT_PASS) | passwd $USER_NAME
+echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
+#KDE
+(echo ; echo y) | pacman -S sddm
+(echo ; echo 2; echo; echo y) | pacman -S plasma
+(echo 2; echo Y) | pacman -S kcalc konsole kwrite dolphin ark p7zip zip unzip unrar gwenview qt5-imageformats kimageformats k3b dvd+rw-tools vcdimager transcode emovix jdk8-openjdk icedtea-web libreoffice-fresh hyphen-en libmythes mythes-en kdegraphics-ocular simplescreenrecorder amarok ktorrent partitionmanager ntfs-3g dosfstools ncdu cups hplip print-manager sane xsane firefox gtk-theme-orion cronie
+systemctl enable sddm
+systemctl enable NetworkManager
+systemctl enable org.cups.cupsd
+systemctl enable cronie
+#Home directories
+cd /home/bhupendra
+mkdir -p Downloads Videos Music Pictures Documents DEV/scripts DEV/WORKSPACE
+echo 'PATH="$HOME/DEV/scripts:$PATH"' >> /home/bhupendra/.bashrc
+#aur packages
+yaourt -S npapi-vlc-git
+yaourt -S --noconfirm google-chrome
 exit
 EOF
 
