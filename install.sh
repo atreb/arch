@@ -33,8 +33,7 @@ sed -i -e 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 locale-gen
 locale > /etc/locale.conf
 #setup ntp & manually synchronize your clock with the network & enable it's service
-(echo Y) | pacman -S ntp
-ntpd -qg
+pacman -S --noconfirm ntp
 systemctl enable ntpd
 #set hardware clock to utc
 hwclock --systohc --utc
