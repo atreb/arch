@@ -5,13 +5,13 @@ HOST_NAME="arch"
 ROOT_PASS="test"
 USER_NAME="bhupendra"
 USER_PASS="test"
-DE="kde"
+DE="base"
 
 #create partitions - 9G root / and 1G swap assuming 10G /dev/sda
 (echo o; echo n; echo p; echo 1; echo ; echo $ROOT_SPACE; echo w) | fdisk /dev/sda
 (echo n; echo p; echo 2; echo ; echo ; echo w) | fdisk /dev/sda
 (echo a; echo 1; echo w) | fdisk /dev/sda
-(echo a; echo 2;) | fdisk /dev/sda
+(echo a; echo 2; echo w) | fdisk /dev/sda
 #format partitions
 mkfs -t ext4 /dev/sda1
 mkswap /dev/sda2
@@ -79,3 +79,8 @@ arch-chroot /mnt /root/base-chroot-install.sh
 #delete file and unmount
 rm -rf /mnt/root/base-chroot-install.sh
 umount -R /mnt
+echo ---------------------------------------
+echo Arch install done. Rebooting in 5 secs.
+echo ---------------------------------------
+sleep 5
+reboot
