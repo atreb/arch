@@ -51,7 +51,11 @@ pacman -Rs --noconfirm vi nano
 pacman -S --noconfirm vim wget rsync openssh git
 ln -s /usr/bin/vim /usr/bin/vi
 #install audio & video drivers as well as xorg
-pacman -S --noconfirm xorg-server xorg-server-utils xorg-xinit mesa alsa-utils alsa-plugins xf86-video-vesa xf86-video-ati xf86-video-intel xf86-video-nouveau
+pacman -S --noconfirm xorg-server xorg-server-utils xorg-xinit mesa alsa-utils alsa-plugins xf86-video-vesa xf86-video-ati xf86-video-intel xf86-video-nouveau xf86-input-synaptics
+#install and enable firewall
+pacman -S --noconfirm ufw
+ufw enable
+systemctl enable ufw
 #configure and install yaourt
 echo '[archlinuxfr]' >> /etc/pacman.conf
 echo 'SigLevel = Never' >> /etc/pacman.conf
@@ -66,6 +70,7 @@ echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 #Home directories
 cd /home/$USER_NAME
 mkdir -p Downloads Videos Music Pictures Documents DEV/scripts DEV/WORKSPACE
+chown -R bhupendra:users *
 echo 'PATH="/home/$USER_NAME/DEV/scripts:\$PATH"' >> /home/$USER_NAME/.bashrc
 #install desktop environment
 wget "https://raw.githubusercontent.com/atreb/arch/master/$DE.sh"
@@ -77,6 +82,7 @@ chmod 775 /mnt/root/base-chroot-install.sh
 arch-chroot /mnt /root/base-chroot-install.sh
 #delete file and unmount
 rm -rf /mnt/root/base-chroot-install.sh
+rm -rf "/mnt/home/$USER_NAME/$DE.sh"
 umount -R /mnt
 echo ---------------------------------------
 echo Arch install done. Rebooting in 5 secs.
