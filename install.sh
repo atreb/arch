@@ -21,7 +21,6 @@ mount /dev/sda1 /mnt
 pacstrap /mnt base base-devel
 #setup fstab
 genfstab -U -p /mnt >> /mnt/etc/fstab
-echo "/dev/sda2 none swap defaults 0 0" >> /mnt/etc/fstab
 
 #stuff here to go inside chroot
 cat <<EOF > /mnt/root/base-chroot-install.sh
