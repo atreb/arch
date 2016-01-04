@@ -70,6 +70,6 @@ vm.vfs_cache_pressure=50
 ```
 - improve boot time for grub
 ```
-sudo vim /etc/default/grub and change GRUB_TIMEOUT=1 for quicker booting
+sudo vim /etc/default/grub and change GRUB_TIMEOUT=1
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
